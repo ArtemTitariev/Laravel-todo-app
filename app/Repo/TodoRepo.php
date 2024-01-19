@@ -11,23 +11,28 @@ class TodoRepo extends Component
 
     public function save($data)
     {
-        $createdTodo = auth()->user()->todos()->create($data);
+        return auth()->user()->todos()->create($data);
         // if ($createdTodo) {
         //     return $createdTodo;
         // }
-        return $createdTodo ?? null;
+        //return $createdTodo ?? null;
     }
 
     public function update($todoId, $editedTodo)
     {
-        $todo = $this->getTodo($todoId);
+        $todo = $this->get($todoId);
 
         return $todo->update([
             'todo' => $editedTodo,
         ]);
     }
 
-    public function getTodo($todoId)
+    public function delete($todoId)
+    {
+        return $this->get($todoId)->deleteTodo();
+    }
+
+    public function get($todoId)
     {
         return auth()->user()->todos()->find($todoId);
     }

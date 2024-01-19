@@ -40,7 +40,7 @@
                         onClick="document.getElementById({{ $todo->id }}).select();">
                         {{ __('Edit') }}
                     </x-secondary-button>
-                    <x-danger-button>
+                    <x-danger-button wire:click="deleteTodo({{ $todo->id }})">
                         {{ __('Delete') }}
                     </x-danger-button>
                 @endif
