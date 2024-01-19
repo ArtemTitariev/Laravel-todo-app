@@ -57,6 +57,10 @@ class Todo extends Component
         $this->editTodoId = null;
     }
 
+    public function markComplered($todoId) {
+        $this->repo->completed($todoId);
+    }
+
     public function render()
     {
         $todos = $this->repo->getAll();
