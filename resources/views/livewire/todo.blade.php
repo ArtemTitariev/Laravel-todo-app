@@ -21,7 +21,9 @@
             </div>
             <div class="w-7/12">
                 @if ($editTodoId === $todo->id)
-                    <x-input-error :messages="$errors->get('editedTodo')" />
+                    <div class="flex justify-center">
+                        <x-input-error :messages="$errors->get('editedTodo')" />
+                    </div>
 
                     <x-textarea id="area{{ $todo->id }}" wire:model="editedTodo" class="w-full mr-2" />
                 @else
@@ -55,13 +57,25 @@
 
     @empty
         <div class="flex mt-5 py-4 justify-between">
-            {{ __('You do not have any todo yet.') }}
+            {{ __('You do not have any Todo yet.') }}
         </div>
     @endforelse
 
 
     <div class="mt-5">
         {{ $todos->links() }}
-        <div>
+    </div>
 
+    <div class="py-12">
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+            @if (session()->has('message'))
+                <div wire:poll="clearMessage"
+                    class="bg-gray-100 border-t-4 border-green-600 rounded-b text-gray-800 px-4 py-3 shadow-md text-sm fixed bottom-4 right-4"
+                    role="alert">
+                    {{ session('message') }}
+                </div>
+            @endif
         </div>
+    </div>
+
+</div>

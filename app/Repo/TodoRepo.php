@@ -11,32 +11,56 @@ class TodoRepo extends Component
 
     public function save($data)
     {
-        return auth()->user()->todos()->create($data);
-        // if ($createdTodo) {
-        //     return $createdTodo;
-        // }
-        //return $createdTodo ?? null;
+        try {
+            $todo = auth()->user()->todos()->create($data);
+            $this->notify(__('Todo successfully created!'));
+            return $todo;
+        } catch (\Exception $e) {
+            $this->notify(__('Failed to create Todo. Please try again.'));
+            return null;
+        }
     }
 
     public function update($todoId, $editedTodo)
     {
-        $todo = $this->get($todoId);
-
-        return $todo->update([
-            'todo' => $editedTodo,
-        ]);
+        try {
+            $todo = $this->get($todoId);
+            $todo->update([
+                'todo' => $editedTodo,
+            ]);
+            $this->notify(__('Todo successfully updated!'));
+            return true;
+        } catch (\Exception $e) {
+            $this->notify(__('Failed to update Todo. Please try again.'));
+            return false;
+        }
     }
 
     public function delete($todoId)
     {
-        return $this->get($todoId)->delete();
+        try {
+            $todo = $this->get($todoId);
+            $todo->delete();
+            $this->notify(__('Todo successfully deleted!'));
+            return true;
+        } catch (\Exception $e) {
+            $this->notify(__('Failed to delete Todo. Please try again.'));
+            return false;
+        }
     }
+
 
     public function completed($todoId)
     {
         $todo = $this->get($todoId);
-
-        return $todo->update(['is_completed' => !$todo->is_completed]);
+        try {
+            $todo->update(['is_completed' => !$todo->is_completed]);
+            $this->notify(__('Todo status changed successfully!'));
+            return true;
+        } catch (\Exception $e) {
+            $this->notify(__('Failed to change Todo status. Please try again.'));
+            return false;
+        }
     }
 
     public function get($todoId)
@@ -52,5 +76,15 @@ class TodoRepo extends Component
             ->latest()->paginate(10);
 
         return $todos;
+    }
+
+    public function notify($message)
+    {
+        session()->flash('message', $message);
+    }
+
+    public function clearMessage()
+    {
+        session()->forget('message');
     }
 }

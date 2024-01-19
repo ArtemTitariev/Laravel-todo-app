@@ -57,7 +57,8 @@ class Todo extends Component
         $this->editTodoId = null;
     }
 
-    public function markComplered($todoId) {
+    public function markComplered($todoId)
+    {
         $this->repo->completed($todoId);
     }
 
@@ -66,5 +67,10 @@ class Todo extends Component
         $todos = $this->repo->getAll();
 
         return view('livewire.todo', compact('todos'));
+    }
+
+    public function clearMessage()
+    {
+        $this->repo->clearMessage();
     }
 }
