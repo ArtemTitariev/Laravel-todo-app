@@ -23,7 +23,7 @@
                 @if ($editTodoId === $todo->id)
                     <x-input-error :messages="$errors->get('editedTodo')" />
 
-                    <x-text-input wire:model="editedTodo" class="w-full mr-2" />
+                    <x-textarea id="area{{ $todo->id }}" wire:model="editedTodo" class="w-full mr-2" />
                 @else
                     <span class="break-all @if ($todo->is_completed) text-green-600 @endif">
                         {{ $todo->todo }}
@@ -42,6 +42,7 @@
                     </x-danger-button>
                 @else
                     <x-secondary-button wire:click="editTodo({{ $todo->id }})">
+                        {{-- onclick="document.getElementById('area{{ $todo->id }}').select();" --}}
                         {{ __('Edit') }}
                     </x-secondary-button>
                     <x-danger-button wire:click="deleteTodo({{ $todo->id }})">
