@@ -15,16 +15,19 @@
     @forelse ($todos as $todo)
         <div class="flex mt-5 py-4 justify-between">
             <div class="my-auto">
-                <input id="green-checkbox" type="checkbox"
+                <input id="checkbox{{ $todo->id }}" type="checkbox" wire:click="markComplered({{ $todo->id }})"
+                    @if ($todo->is_completed) checked @else unchecked @endif
                     class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
             </div>
-            <div>
+            <div class="w-7/12">
                 @if ($editTodoId === $todo->id)
                     <x-input-error :messages="$errors->get('editedTodo')" />
 
                     <x-text-input wire:model="editedTodo" class="w-full mr-2" />
                 @else
-                    {{ $todo->todo }}
+                    <span class="break-all @if ($todo->is_completed) text-green-600 @endif">
+                        {{ $todo->todo }}
+                    </span>
                 @endif
 
             </div>
@@ -50,6 +53,9 @@
         </div>
 
     @empty
+        <div class="flex mt-5 py-4 justify-between">
+            {{ __('You do not have any todo yet.') }}
+        </div>
     @endforelse
 
 

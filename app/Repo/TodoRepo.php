@@ -29,7 +29,14 @@ class TodoRepo extends Component
 
     public function delete($todoId)
     {
-        return $this->get($todoId)->deleteTodo();
+        return $this->get($todoId)->delete();
+    }
+
+    public function completed($todoId)
+    {
+        $todo = $this->get($todoId);
+
+        return $todo->update(['is_completed' => !$todo->is_completed]);
     }
 
     public function get($todoId)
@@ -39,7 +46,10 @@ class TodoRepo extends Component
 
     public function getAll()
     {
-        $todos = auth()->user()->todos()->latest()->paginate(10);
+        $todos = auth()->user()->todos()
+            ->orderBy('is_completed')
+            ->orderBy('created_at')
+            ->latest()->paginate(10);
 
         return $todos;
     }
